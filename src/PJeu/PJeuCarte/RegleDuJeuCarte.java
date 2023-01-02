@@ -1,4 +1,4 @@
-package PJeuCarte;
+package PJeu.PJeuCarte;
 
 import java.util.*;
 
@@ -14,7 +14,6 @@ public class RegleDuJeuCarte {
     @Override
     public String toString() {
         String affichage = "";
-
         for (Map.Entry mapentry : a_regle.entrySet()) {
             String nomJeu = (String) mapentry.getKey();
             String regleJeu = (String) mapentry.getValue();
@@ -24,7 +23,16 @@ public class RegleDuJeuCarte {
         return affichage;
     }
 
+    public List<String> getJeux() {
+        List<String> jeux = new ArrayList<>();
+        for (Map.Entry mapentry : a_regle.entrySet()) {
+            String nomJeu = (String) mapentry.getKey();
+            jeux.add(nomJeu);
+        }
+        return jeux;
+    }
+
     RegleDuJeuCarte() {
-        a_regle.put("Bataille", "Règle Bataille");
+        a_regle.put("Bataille", "Règle Bataille, 1 signifie victoire et 0 défaite");
     }
 }

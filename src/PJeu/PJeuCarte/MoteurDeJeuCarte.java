@@ -1,19 +1,33 @@
-package PJeuCarte;
+package PJeu.PJeuCarte;
 
-import PCarte.Carte;
-import PCarte.Couleur;
+import PJeu.PJeuCarte.PCarte.Carte;
+import PJeu.PJeuCarte.PCarte.Couleur;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class MoteurDeJeuCarte {
 
-    private List<Carte> a_cartes;
+    private List<Carte> a_cartes = new ArrayList<>();
 
-    MoteurDeJeuCarte(JeuCarte jeuCarte) {
-        a_cartes = new ArrayList<>();
+    MoteurDeJeuCarte() {
+
+    }
+
+
+    public Integer jouer(String nomJeu) {
+        if (nomJeu == "Bataille") {
+            creer52Cartes();
+            Collections.shuffle(this.a_cartes);
+            JeuBataille jeuBataille = new JeuBataille(this.a_cartes);
+            return jeuBataille.lancerPartie();
+        } else {
+            return null;
+        }
+    }
+
+    private void creer52Cartes() {
         for (int i = 1; i < 14; i++) {
             String value;
             if (i == 13) {
@@ -29,18 +43,10 @@ public class MoteurDeJeuCarte {
             Carte carte2 = new Carte(value, Couleur.COEUR);
             Carte carte3 = new Carte(value, Couleur.CARREAU);
             Carte carte4 = new Carte(value, Couleur.TREFLE);
-            a_cartes.add(carte1);
-            a_cartes.add(carte2);
-            a_cartes.add(carte3);
-            a_cartes.add(carte4);
-        }
-    }
-
-
-    public void jouer(String nomJeu) {
-        if (nomJeu == "Bataille") {
-            Collections.shuffle(this.a_cartes);
-            JeuBataille jeuBataille = new JeuBataille(this.a_cartes, "j1", "j2");
+            this.a_cartes.add(carte1);
+            this.a_cartes.add(carte2);
+            this.a_cartes.add(carte3);
+            this.a_cartes.add(carte4);
         }
     }
 

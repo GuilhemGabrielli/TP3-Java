@@ -1,4 +1,4 @@
-package PCarte;
+package PJeu.PJeuCarte.PCarte;
 
 import java.util.Arrays;
 import java.util.LinkedList;

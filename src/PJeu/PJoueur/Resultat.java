@@ -1,4 +1,4 @@
-package PJoueur;
+package PJeu.PJoueur;
 
 import java.util.*;
 

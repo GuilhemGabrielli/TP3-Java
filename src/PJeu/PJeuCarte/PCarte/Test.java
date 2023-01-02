@@ -1,4 +1,4 @@
-package PCarte;
+package PJeu.PJeuCarte.PCarte;
 
 public class Test {
 

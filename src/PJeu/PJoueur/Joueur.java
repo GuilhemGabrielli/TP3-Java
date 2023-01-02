@@ -1,4 +1,4 @@
-package PJoueur;
+package PJeu.PJoueur;
 
 import java.text.MessageFormat;
 
@@ -49,7 +49,7 @@ public class Joueur {
 
 
     public void afficher() {
-        System.out.println(this.toString());
+        System.out.println(this);
     }
 
     @Override
