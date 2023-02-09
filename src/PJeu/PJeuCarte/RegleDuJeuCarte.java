@@ -2,37 +2,29 @@ package PJeu.PJeuCarte;
 
 import java.util.*;
 
-public class RegleDuJeuCarte {
+public class RegleDuJeuCarte implements IRegle {
 
-    protected Map<String, String> a_regle = new HashMap<>();
+    public String a_regle = "";
 
-    public void afficher(String nomJeu) {
-        System.out.println(nomJeu + " : " + a_regle.get(nomJeu));
+    @Override
+    public void afficher() {
+        /**
+         * Affiche l'affichage de la fonction toString()
+         */
+        System.out.println(a_regle);
     }
 
 
     @Override
     public String toString() {
-        String affichage = "";
-        for (Map.Entry mapentry : a_regle.entrySet()) {
-            String nomJeu = (String) mapentry.getKey();
-            String regleJeu = (String) mapentry.getValue();
-            affichage += nomJeu + " : " + regleJeu;
-        }
-
-        return affichage;
+        /**
+         * Renvoie l'affichage de tous les jeux ainsi que leur règle
+         */
+        return a_regle;
     }
 
-    public List<String> getJeux() {
-        List<String> jeux = new ArrayList<>();
-        for (Map.Entry mapentry : a_regle.entrySet()) {
-            String nomJeu = (String) mapentry.getKey();
-            jeux.add(nomJeu);
-        }
-        return jeux;
-    }
 
-    RegleDuJeuCarte() {
-        a_regle.put("Bataille", "Règle Bataille, 1 signifie victoire et 0 défaite");
+    public RegleDuJeuCarte(String regle) {
+        this.a_regle = regle;
     }
 }

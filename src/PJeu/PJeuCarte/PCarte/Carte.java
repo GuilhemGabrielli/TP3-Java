@@ -11,13 +11,8 @@ public class Carte {
 
     private final List<String> a_valeurPossible = new LinkedList<>(Arrays.asList("2", "3", "4", "5", "6", "7", "8", "9", "10", "Valet", "Reine", "Roi", "1"));
 
-
     private Carte() {
         this(null, null);
-    }
-
-    private boolean checkValeur(String newValeur) {
-        return Arrays.asList(this.a_valeurPossible).contains(newValeur);
     }
 
     public Carte(Carte carte) {
@@ -46,6 +41,9 @@ public class Carte {
 
     @Override
     public boolean equals(Object obj) {
+        /**
+         * Vérifie un booléen en fonction de l'égalité entre 2 objets
+         */
         if (obj == null) {
             return false;
         }

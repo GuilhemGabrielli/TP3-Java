@@ -14,6 +14,9 @@ public class Resultat {
     }
 
     public Integer getBestScore(String nomJeu) {
+        /**
+         * Renvoie le meilleur score du joueur pour le jeu mis en paramètre
+         */
         boolean checkScore = this.checkSiScore(nomJeu);
         if (checkScore) {
             List<Integer> score = this.a_score.get(nomJeu);
@@ -26,16 +29,21 @@ public class Resultat {
     }
 
     public List<Integer> getAllScore(String nomJeu) {
+        /**
+         * Renvoie une liste de tout les scores du joueur pour le jeu mis en paramètre
+         */
         boolean checkScore = this.checkSiScore(nomJeu);
         if (checkScore) {
             return this.a_score.get(nomJeu);
         } else {
             return null;
         }
-
     }
 
     public Integer getLastScore(String nomJeu) {
+        /**
+         * Renvoie le dernier score du joueur pour le jeu mis en paramètre
+         */
         boolean checkScore = this.checkSiScore(nomJeu);
         if (checkScore) {
             Integer nombreScore = this.a_score.get(nomJeu).size();
@@ -46,6 +54,9 @@ public class Resultat {
     }
 
     public void addScore(String nomJeu, Integer newScore) {
+        /**
+         * Ajoute le score mis en paramètre pour le jeu en paramètre
+         */
         boolean checkJeu = this.checkSiJeu(nomJeu);
         if (checkJeu) {
             List<Integer> score = this.a_score.get(nomJeu);
@@ -57,17 +68,15 @@ public class Resultat {
         }
     }
 
-    public void addJeu(String nomJeu) {
-        List<Integer> score = new ArrayList<>();
-        this.a_score.put(nomJeu, score);
-    }
-
     public void afficher() {
         System.out.println(this.toString());
     }
 
     @Override
     public String toString() {
+        /**
+         * Renvoie l'affichage de tout les jeux ainsi que leurs score triès par ordre décroissant
+         */
         String result = "";
         for (Map.Entry mapentry : a_score.entrySet()) {
             String jeu = (String) mapentry.getKey();
@@ -84,10 +93,20 @@ public class Resultat {
 
 
     private boolean checkSiJeu(String nomJeu) {
+        /**
+         * Test si le jeu existe
+         * Return :
+         *      Renvoie un booléen en fonction du résultat
+         */
         return !(this.a_score.get(nomJeu) == null);
     }
 
     private boolean checkSiScore(String nomJeu) {
+        /**
+         * Test si un score à été inscrit pour le jeu mis en paramètre
+         * Return :
+         *      Renvoie un booléen en fonction du résultat
+         */
         boolean checkJeu = this.checkSiJeu(nomJeu);
         if (checkJeu) {
             return this.a_score.get(nomJeu).size()>0;

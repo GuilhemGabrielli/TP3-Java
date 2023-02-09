@@ -1,46 +1,24 @@
 package PJeu.PJeuCarte;
 
-import PJeu.PJoueur.Joueur;
+import PJeu.Utilitaire;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
 
-public class JeuCarte {
+public class JeuCarte extends AJeu {
 
-    private List<Joueur> a_joueur = new ArrayList<>();
-    private RegleDuJeuCarte a_regle = new RegleDuJeuCarte();
     private MoteurDeJeuCarte a_moteurJeu = new MoteurDeJeuCarte();
-
-    private Scanner sc = new Scanner(System.in);
-
+    private Utilitaire utilitaire = new Utilitaire();
 
 
-    public void addJoueur() {
-        System.out.print("Nom du nouveau joueur : ");
-        String nom = sc.next();
-
-        System.out.print("Prénom du nouveau joueur : ");
-        String prenom = sc.next();
-
-        System.out.print("Pseudo du nouveau joueur : ");
-        String pseudo = sc.next();
-
-        Joueur newJoueur = new Joueur(prenom, nom, pseudo);
-        a_joueur.add(newJoueur);
-        System.out.println("Joueur ajouté avec succès \n");
-    }
-
-    public RegleDuJeuCarte getRegle() {
-        return this.a_regle;
-    }
-
-    JeuCarte() {
-        Joueur newJ = new Joueur("prenom", "nom", "pseudo");
-        this.a_joueur.add(newJ);
-
+    public JeuCarte() {
+        super();
+        /**
+         * Constructeur lançant immédiatement le menu
+         */
         String menu = String.join("\n",
-            "Que souhaitez-vous faire ? : ",
+            "\nQue souhaitez-vous faire ? : ",
             "1 - Voir les règles des différents jeux",
             "2 - Ajouter un joueur",
             "3 - Jouer",
@@ -52,24 +30,32 @@ public class JeuCarte {
             System.out.print(menu);
             String choix = sc.next();
             if (choix.equals("1")) {
-                System.out.println(this.a_regle+"\n");
+                this.afficherRegle();
             } else if (choix.equals("2")) {
                 this.addJoueur();
             } else if (choix.equals("3")) {
                 if (this.a_joueur.size() > 0) {
                     this.jouer();
                 } else {
-                    System.out.println("Aucun joueur existant \n");
+                    System.out.println("Aucun joueur existant");
                 }
             } else if (choix.equals("4")) {
-                this.statJoueur();
+                if (this.a_joueur.size() > 0) {
+                    this.statJoueur();
+                } else {
+                    System.out.println("Aucun joueur existant");
+                }
             } else if (choix.equals("0")) {
+                System.out.println("Bye");
                 return;
             }
         }
     }
 
     private void statJoueur() {
+        /**
+         * Menu permettant de demander à l'utilisateur les stats pour un joueur
+         */
         Integer idJoueur = afficherJoueur();
         Integer resultatAVoir = null;
         String menuJoueur = String.join("\n",
@@ -80,13 +66,14 @@ public class JeuCarte {
                 "4 - Le meilleur score pour un seul jeu",
                 "Votre choix : ");
         while (resultatAVoir == null) {
-            resultatAVoir = myInputInt(menuJoueur);
+            resultatAVoir = utilitaire.myInputInt(menuJoueur);
             if (resultatAVoir < 1 || resultatAVoir > 4) {
                 resultatAVoir = null;
             }
         }
         if (resultatAVoir != 1) {
-            String jeuxAVoir = afficherJeux();
+            Integer idJeu = afficherJeux();
+            String jeuxAVoir = getAllJeux().get(idJeu);
             if (resultatAVoir == 2) {
                 List<Integer> bestScore = this.a_joueur.get(idJoueur).getResultat().getAllScore(jeuxAVoir);
                 if (bestScore != null) {
@@ -96,12 +83,12 @@ public class JeuCarte {
                     }
                     System.out.println(affichage);
                 } else {
-                    System.out.println("\nAucun score enregistré pour ce jeu \n");
+                    System.out.println("\nAucun score enregistré pour ce jeu");
                 }
             } else if (resultatAVoir == 3) {
                 System.out.println("\nDernier score de "+this.a_joueur.get(idJoueur).getPseudo()+" pour le jeu "+jeuxAVoir+" : "+this.a_joueur.get(idJoueur).getResultat().getLastScore(jeuxAVoir)+"\n");
             } else {
-                System.out.println("\nMeilleur score de"+this.a_joueur.get(idJoueur).getPseudo()+" pour le jeu "+jeuxAVoir+" : "+this.a_joueur.get(idJoueur).getResultat().getBestScore(jeuxAVoir)+"\n");
+                System.out.println("\nMeilleur score de "+this.a_joueur.get(idJoueur).getPseudo()+" pour le jeu "+jeuxAVoir+" : "+this.a_joueur.get(idJoueur).getResultat().getBestScore(jeuxAVoir)+"\n");
             }
         } else {
             System.out.println("\n"+this.a_joueur.get(idJoueur) + "\n");
@@ -110,14 +97,19 @@ public class JeuCarte {
 
 
     private Integer afficherJoueur() {
+        /**
+         * Menu demandant à l'utilisateur de choisir un joueur
+         * Return :
+         *      Renvoi l'index du joueur parmi la liste a_joueur
+         */
         Integer idJoueur = null;
         while (idJoueur == null) {
-            String affichage = "\nListe des joueurs : \n";
+            String affichage = "\nChoisir le jeu : \n";
             for (int i = 0; i < this.a_joueur.size(); i++) {
                 affichage += (i+1) +" - "+ this.a_joueur.get(i).getPseudo() + "\n";
             }
             affichage += "Joueur : ";
-            idJoueur = myInputInt(affichage);
+            idJoueur = utilitaire.myInputInt(affichage);
             if (idJoueur > this.a_joueur.size() || idJoueur == 0) {
                 idJoueur = null;
             }
@@ -126,50 +118,64 @@ public class JeuCarte {
     }
 
 
-    private String afficherJeux() {
+    private Integer afficherJeux() {
+        /**
+         * Menu demandant à l'utilisateur de choisir un jeu
+         * Return :
+         *      Renvoi l'id du jeu choisi
+         */
         Integer idJeu = null;
-        List<String> nomJeux = this.a_regle.getJeux();
+        List<String> nomJeux = getAllJeux();
         while (idJeu == null) {
-            String affichage = "\nJeux disponibles : \n";
+            String affichage = "\nChoisir le jeu : \n";
             for (int i = 0; i < nomJeux.size(); i++) {
                 affichage += (i+1) +" - "+ nomJeux.get(i) + "\n";
             }
             affichage += "Jeu : ";
-            idJeu = myInputInt(affichage);
+            idJeu = utilitaire.myInputInt(affichage);
             if (idJeu > nomJeux.size() || idJeu == 0) {
                 idJeu = null;
             }
         }
-        return nomJeux.get(idJeu-1);
+        return idJeu-1;
     }
 
 
-    private void jouer() {
+    public void jouer() {
+        /**
+         * Fonction lancant une partie selon un joueur et un jeu choisi
+         */
         Integer idJoueur = afficherJoueur();
-        String nomJeu = afficherJeux();
+        Integer idJeu = afficherJeux();
+        String nomJeu = getAllJeux().get(idJeu);
         Integer result = a_moteurJeu.jouer(nomJeu);
         this.a_joueur.get(idJoueur).getResultat().addScore(nomJeu, result);
     }
 
-
-    public Integer myInputInt(String message) {
+    public List<String> getAllJeux() {
         /**
-         * Retourne un entier
+         * Renvoie sous forme de liste tous les jeux disponibles
          */
-        System.out.print(message);
-        try {
-            String str = sc.next();
-            int result = Integer.parseInt(str);
-            if (result < 0) {
-                result *= -1;
-            }
-            return result;
-        } catch (Exception e) {
-            System.out.println("Erreur, veuillez rentrer un entier. ");
-            return null;
+        List<String> jeux = new ArrayList<>();
+        for (Map.Entry mapentry : a_listeRegle.entrySet()) {
+            String nomJeu = (String) mapentry.getKey();
+            jeux.add(nomJeu);
+        }
+        return jeux;
+    }
+
+
+    public void afficherRegle() {
+        for (Map.Entry mapentry : a_listeRegle.entrySet()) {
+            String nomJeu = (String) mapentry.getKey();
+            IRegle regleJeu = (IRegle) mapentry.getValue();
+            System.out.println(nomJeu + " : " + regleJeu.toString());
         }
 
     }
+
+
+
 
 
 

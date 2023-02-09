@@ -12,6 +12,11 @@ public class JeuBataille {
     private Map<Integer, List<Carte>>  fausse = new HashMap<>();
 
     JeuBataille(List<Carte> cartes) {
+        /**
+         * Contructeur de la classe.
+         * Réparti les cartes entre les 2 joueurs
+         */
+        System.out.print("debut");
         List<Carte> sousListe0 = cartes.subList(0, 26);
         List<Carte> sousListe1 = cartes.subList(26,52);
 
@@ -28,6 +33,11 @@ public class JeuBataille {
     }
 
     public int lancerPartie() {
+        /**
+         * Fonction executant la partie jusqu'à ce qu'un des 2 joueurs n'est plus de carte
+         * Return :
+         *      Renvoie 1 si le gagant est le joueur, 0 si l'utilisateur a perdu
+         */
         while ((this.a_cartes.get(0).size()>0 || this.fausse.get(0).size()>0) && (this.a_cartes.get(1).size()>0 || this.fausse.get(1).size()>0)) {
             nbTour++;
             Carte carte1 = retournerCarte(0);
@@ -35,15 +45,20 @@ public class JeuBataille {
             comparerCartes(carte1, carte2);
         }
         if (this.a_cartes.get(0).size() != 0) {
-            System.out.println("Le joueur a gagné");
+            System.out.println("\nLe joueur a gagné en "+nbTour+" coups\n");
             return 1;
         } else {
-            System.out.println("Le joueur a perdu");
+            System.out.println("\nLe joueur a perdu en "+nbTour+" coups\n");
             return 0;
         }
     }
 
     private Carte retournerCarte(int idJoueur) {
+        /**
+         * Renvoie la premiere carte de la liste grâce au paramètre spécifiant le joueur
+         * Return :
+         *      Objet de tyoe Carte
+         */
         Integer nb_carte = this.a_cartes.get(idJoueur).size();
         if (nb_carte>0) {
             return this.a_cartes.get(idJoueur).remove(0);
@@ -59,6 +74,11 @@ public class JeuBataille {
     }
 
     private Integer comparerCartes(Carte carteJoueur1, Carte carteJoueur2) {
+        /**
+         * Fonction comparant les valeurs entre les 2 cartes en paramètres. La fonction gère aussi de façon récursive la bataille.
+         * Return:
+         *      Renvoie 0 si le gagnant du tout est le joueur ou 1 si c'est l'IA
+         */
         Integer valeur1 = carteJoueur1.getValeur();
         Integer valeur2 = carteJoueur2.getValeur();
 

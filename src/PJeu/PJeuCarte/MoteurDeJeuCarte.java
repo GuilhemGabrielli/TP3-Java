@@ -15,8 +15,10 @@ public class MoteurDeJeuCarte {
 
     }
 
-
     public Integer jouer(String nomJeu) {
+        /**
+         * Fonction lançant le jeu mis en paramètre
+         */
         if (nomJeu == "Bataille") {
             creer52Cartes();
             Collections.shuffle(this.a_cartes);
@@ -28,6 +30,9 @@ public class MoteurDeJeuCarte {
     }
 
     private void creer52Cartes() {
+        /**
+         * Fonction ajoutant les 52 cartes dans la liste a_cartes
+         */
         for (int i = 1; i < 14; i++) {
             String value;
             if (i == 13) {
